@@ -1,5 +1,5 @@
 # Crypt-Kicker
-Problem 2.8.4 of Programming Challenges by Steven S. Skiena and Miguel A. Revilla
+### Problem 2.8.4 of Programming Challenges by Steven S. Skiena and Miguel A. Revilla
 
 A common but insecure method of encrypting text is to permute the letters of the
 alphabet. In other words, each letter of the alphabet is consistently replaced in the text
