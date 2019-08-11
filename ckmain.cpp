@@ -132,7 +132,6 @@ int main()
         if(s2.length()==0)
         continue;
         ret=mapping(word,map,st,0,word.size()-1);
-        //ret=-1;
         if (ret==-1)
             disp_impossible(s2);
         else
