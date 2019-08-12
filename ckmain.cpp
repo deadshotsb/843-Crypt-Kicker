@@ -10,8 +10,10 @@
 #define v vector
 #define pb push_back
 #define print cout<<
+#define input cin>>
+#define S_input(s) getline(cin,s)
 using namespace std;
-
+ 
 void disp(S s2,char map[26])
 {
     for (auto x:s2)
@@ -23,7 +25,7 @@ void disp(S s2,char map[26])
     }
     print '\n';
 }
-
+ 
 void disp_impossible(S s2)
 {
     for (auto x:s2)
@@ -35,7 +37,7 @@ void disp_impossible(S s2)
     }
     print '\n';
 }
-
+ 
 int setlen(S sl)
 {
     return std::set<char>(sl.begin(), sl.end()).size();
@@ -45,6 +47,8 @@ bool cmstring(S S1,S S2)
     if (S1.length() < S2.length())
         return true;
     else if (setlen(S1) < setlen(S2))
+        return true;
+    else if (S1.length()==S2.length() and S1.compare(S2)<0)
         return true;
     else
         return false;
@@ -83,7 +87,7 @@ int mapped(char map[26],S str,S str2)
     }
     return 0;
 }
-
+ 
 int mapping(v<S> word,char map[26],v<S> st[16],int lp,int up)
 {
     if (lp>up)
@@ -97,7 +101,10 @@ int mapping(v<S> word,char map[26],v<S> st[16],int lp,int up)
         else if(setstring(word[lp],st[l-1][i])==0)
         {
             if (mapped(map,word[lp],st[l-1][i])==0)
+            {
+                for(;(lp>up && !(word[lp].compare(word[lp+1])));lp++);
                 return mapping(word,map,st,lp+1,up);
+            }
         }
     }
     return -1;
@@ -108,12 +115,12 @@ int main()
     cin.tie(NULL);
     cout.tie(NULL);
     int T,j,ret;
-    cin>>T;
+    input T;
     v<S> st[16];
     S s1,s2,s3;
     for (j=0;j<T;j++)
     {
-        cin>>s1;
+        input s1;
         st[s1.length()-1].pb(s1);
     }
     for (j=0;j<16;j++)
@@ -121,7 +128,7 @@ int main()
         if(st[j].size()>0)
             sort(st[j].begin(),st[j].end(),cmstring);
     }
-    while (getline(cin,s2))
+    while (S_input(s2))
     {
         char map[26]={'\0'};
         v<S> word;
@@ -130,7 +137,10 @@ int main()
             word.pb(s3);
         sort(word.begin(),word.end(),cmstring);
         if(s2.length()==0)
-        continue;
+        {
+            print "\n";
+            continue;
+        }
         ret=mapping(word,map,st,0,word.size()-1);
         if (ret==-1)
             disp_impossible(s2);
