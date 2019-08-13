@@ -14,12 +14,12 @@
 #define S_input(s) getline(cin,s)
 using namespace std;
  
-void disp(S s2,char map[26])
+void disp(S s2,char map_in[26])
 {
     for (auto x:s2)
     {
         if(x!=' ')
-            print map[int(x)-97];
+            print map_in[int(x)-97];
         else
             print ' ';
     }
@@ -64,7 +64,7 @@ int setstring(S str1,S str2)
     else
         return 1;
 }
-int mapped(char map[26],char map2[26],S str,S str2)
+int mapped(char map_in[26],char map_out[26],S str,S str2)
 {
     int i,len,flag=0;
     len=str.length();
@@ -72,19 +72,19 @@ int mapped(char map[26],char map2[26],S str,S str2)
     set<char> B;
     for(i=0;i<len;i++)
     {
-        if (map[int(str[i])-97]=='\0')
+        if (map_in[int(str[i])-97]=='\0')
         {    
-            if (map2[int(str2[i])-97]=='\0')
+            if (map_out[int(str2[i])-97]=='\0')
             {
-                map[int(str[i])-97]=str2[i];
-                map2[int(str2[i])-97]=str[i];
+                map_in[int(str[i])-97]=str2[i];
+                map_out[int(str2[i])-97]=str[i];
                 A.insert(str[i]);
                 B.insert(str2[i]);
             }
-            else if (map2[int(str2[i])-97]!=str[i])
+            else if (map_out[int(str2[i])-97]!=str[i])
             flag=1;
         }
-        else if (map[int(str[i])-97]!=str2[i])
+        else if (map_in[int(str[i])-97]!=str2[i])
             flag=1;
         if (flag==1)
             break;
@@ -92,15 +92,15 @@ int mapped(char map[26],char map2[26],S str,S str2)
     if(flag==1)
     {
         for(auto y:A)
-        map[int(y)-97]='\0';
+        map_in[int(y)-97]='\0';
         for(auto y:B)
-        map2[int(y)-97]='\0';
+        map_out[int(y)-97]='\0';
         return -1;
     }
     return 0;
 }
 
-int mapping(v<S> word,char map[26],char map2[26],v<S> st[16],int lp,int up)
+int mapping(v<S> word,char map_in[26],char map_out[26],v<S> st[16],int lp,int up)
 {
     if (lp>up)
         return 0;
@@ -112,10 +112,10 @@ int mapping(v<S> word,char map[26],char map2[26],v<S> st[16],int lp,int up)
             return -1;
         else if(setstring(word[lp],st[l-1][i])==0)
         {
-            if (mapped(map,map2,word[lp],st[l-1][i])==0)
+            if (mapped(map_in,map_out,word[lp],st[l-1][i])==0)
             {
                 for(;(lp>up && !(word[lp].compare(word[lp+1])));lp++);
-                return mapping(word,map,map2,st,lp+1,up);
+                return mapping(word,map_in,map_out,st,lp+1,up);
             }
         }
     }
@@ -142,10 +142,10 @@ int main()
     }
     while (S_input(s2))
     {
-        char map[26]={'\0'};
-        char map2[26]={'\0'};
+        char map_in[26]={'\0'};
+        char map_out[26]={'\0'};
         v<S> word;
-        stringstream iss(s2); 
+        stringstream iss(s2);
         while (iss >> s3)
             word.pb(s3);
         sort(word.begin(),word.end(),cmstring);
@@ -154,11 +154,11 @@ int main()
             print "\n";
             continue;
         }
-        ret=mapping(word,map,map2,st,0,word.size()-1);
+        ret=mapping(word,map_in,map_out,st,0,word.size()-1);
         if (ret==-1)
             disp_impossible(s2);
         else
-            disp(s2,map);
+            disp(s2,map_in);
     }
     return 0;
 }
