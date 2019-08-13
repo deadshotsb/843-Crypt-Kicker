@@ -64,31 +64,43 @@ int setstring(S str1,S str2)
     else
         return 1;
 }
-int mapped(char map[26],S str,S str2)
+int mapped(char map[26],char map2[26],S str,S str2)
 {
     int i,len,flag=0;
     len=str.length();
     set<char> A;
+    set<char> B;
     for(i=0;i<len;i++)
     {
         if (map[int(str[i])-97]=='\0')
         {    
-            map[int(str[i])-97]=str2[i];
-            A.insert(str[i]);
+            if (map2[int(str2[i])-97]=='\0')
+            {
+                map[int(str[i])-97]=str2[i];
+                map2[int(str2[i])-97]=str[i];
+                A.insert(str[i]);
+                B.insert(str2[i]);
+            }
+            else if (map2[int(str2[i])-97]!=str[i])
+            flag=1;
         }
         else if (map[int(str[i])-97]!=str2[i])
             flag=1;
+        if (flag==1)
+            break;
     }
     if(flag==1)
     {
         for(auto y:A)
         map[int(y)-97]='\0';
+        for(auto y:B)
+        map2[int(y)-97]='\0';
         return -1;
     }
     return 0;
 }
- 
-int mapping(v<S> word,char map[26],v<S> st[16],int lp,int up)
+
+int mapping(v<S> word,char map[26],char map2[26],v<S> st[16],int lp,int up)
 {
     if (lp>up)
         return 0;
@@ -100,10 +112,10 @@ int mapping(v<S> word,char map[26],v<S> st[16],int lp,int up)
             return -1;
         else if(setstring(word[lp],st[l-1][i])==0)
         {
-            if (mapped(map,word[lp],st[l-1][i])==0)
+            if (mapped(map,map2,word[lp],st[l-1][i])==0)
             {
                 for(;(lp>up && !(word[lp].compare(word[lp+1])));lp++);
-                return mapping(word,map,st,lp+1,up);
+                return mapping(word,map,map2,st,lp+1,up);
             }
         }
     }
@@ -131,6 +143,7 @@ int main()
     while (S_input(s2))
     {
         char map[26]={'\0'};
+        char map2[26]={'\0'};
         v<S> word;
         stringstream iss(s2); 
         while (iss >> s3)
@@ -141,7 +154,7 @@ int main()
             print "\n";
             continue;
         }
-        ret=mapping(word,map,st,0,word.size()-1);
+        ret=mapping(word,map,map2,st,0,word.size()-1);
         if (ret==-1)
             disp_impossible(s2);
         else
