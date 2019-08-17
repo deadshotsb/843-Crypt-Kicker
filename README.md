@@ -1,4 +1,4 @@
-# Crypt-Kicker
+# 843-Crypt-Kicker
 ### Problem 2.8.4 of Programming Challenges by Steven S. Skiena and Miguel A. Revilla
 ### Uva online judge problem no. 843
 
